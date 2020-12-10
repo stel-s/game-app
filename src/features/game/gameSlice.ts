@@ -19,6 +19,7 @@ interface GameState {
   notEnoughBalance: boolean;
   eventLog: any[];
   playerWinsRound: boolean;
+  cardsHidden: boolean;
 }
 
 const initialState: GameState = {
@@ -31,6 +32,7 @@ const initialState: GameState = {
   notEnoughBalance: false,
   eventLog: [{gameRound: 0, winningPool: 0, hand: [], balance: defaultBalance}],
   playerWinsRound: false,
+  cardsHidden: false,
 };
 
 const evaluateCard = (card: ICard, hand): boolean => {
@@ -76,11 +78,12 @@ export const gameSlice = createSlice({
     },
     hideCards: state => {
       if(!state.hand[0]) return;
+      state.cardsHidden = true;
       state.hand = [_.shuffle(state.hand[0].map(e => ({...e, visible:false})))] 
     },
     resetGameState: state => initialState,
     revealCard: (state, action: PayloadAction<any>) => {
-      if(state.playerWinsRound) return;
+      if(state.playerWinsRound || !state.cardsHidden) return;
       const {payload} = action;
       let card: any = _.find(state.hand[0], payload)
       card.visible = true;

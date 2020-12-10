@@ -9,8 +9,7 @@ import { resetGameState, resetUserState } from '../../features/';
 export const Navbar: React.FC = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    dispatch(resetGameState());
-        dispatch(resetUserState());
+
     const logout = () => {
         localStorage.removeItem('userName');
         dispatch(resetGameState());

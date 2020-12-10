@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
@@ -9,7 +9,6 @@ import {
 } from '../';
 import {
   increment,
-  decrement,
   selectHand,
   addHand,
   selectGameBalance,
@@ -26,7 +25,6 @@ import {
   selectPlayerWinsround,
 } from '../game/gameSlice';
 
-import { createHands } from './Deck'
 import styles from './Game.module.css';
 import Card from './components/card/Card';
 
@@ -81,15 +79,13 @@ export const Game: React.FC = () => {
         <div className={classnames(styles.box, styles.playerItems)}>
           {playerWinsRound && `Player Wins round ${round}`}
           {round > 0 && playerWinsRound ? <span> Press Deal to continue..</span> : ' Player Cards:'}
-
           <div className={classnames(styles.box, styles.items)}>
-            <div className="playingCards simpleCards">
+            <div className="playingCards simpleCards faceImages">
               {hand[0] && hand[0].map(({ rank, suit, weight, visible }, index) => (
                 <Card rank={rank} suit={suit} weight={weight} key={`Hand-id-${index}`}
                   visible={visible} selectCard={selectCard} />
               ))}
             </div>
-
           </div>
         </div>
         <div className={classnames(styles.box, styles.sidebar)}>
@@ -107,9 +103,7 @@ export const Game: React.FC = () => {
           <div>
             <button type="button" className="button waves-effect waves-light btn" onClick={reset} >Reset Game</button>
           </div>
-
         </div>
-
       </div>
 
       <div className={styles.spaceTop}>
@@ -119,7 +113,7 @@ export const Game: React.FC = () => {
         {gameEnded && 'Game Ended! Press Start Game to start a new Game!'}
       </div>
       <div>
-      Instructions: Cards Will be Presented then hidden and shuffled, Winning Cards are the highest ranking showed
+         Instructions: Cards Will be Presented then hidden and shuffled, Winning Cards are the highest ranking showed
       </div>
       <div className={styles.eventLog}>
         {eventLog.map((event, index) => {
