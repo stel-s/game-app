@@ -41,3 +41,10 @@
 .cardsContainer {
     display: flex;
 }
+
+.spaceTop {
+    margin-top: 40px;
+}
+.eventLog {
+    margin-top: 20vh;
+}

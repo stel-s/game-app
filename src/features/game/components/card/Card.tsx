@@ -1,6 +1,5 @@
 import React from 'react';
 import './cards.css';
-import { useSelector, useDispatch } from 'react-redux';
 
 interface ICardsProps {
   selected?: boolean;

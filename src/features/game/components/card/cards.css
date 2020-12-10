@@ -9,7 +9,23 @@
 
 /* card itself
 ********************************************************************/
+@media (prefers-reduced-motion: no-preference) {
+    .card:hover {
+      animation: card-float infinite 3s ease-in-out;
+    }
+  }
 
+  @keyframes card-float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px)
+    }
+    100% {
+      transform: translateY(0px)
+    }
+  }
 .playingCards .card {
     display: inline-block;
     width: 3.3em;

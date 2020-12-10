@@ -17,6 +17,8 @@ interface GameState {
   winningPool: number;
   gameEnded: boolean;
   notEnoughBalance: boolean;
+  eventLog: any[];
+  playerWinsRound: boolean;
 }
 
 const initialState: GameState = {
@@ -27,6 +29,8 @@ const initialState: GameState = {
   winningPool: 0,
   gameEnded: false,
   notEnoughBalance: false,
+  eventLog: [{gameRound: 0, winningPool: 0, hand: [], balance: defaultBalance}],
+  playerWinsRound: false,
 };
 
 const evaluateCard = (card: ICard, hand): boolean => {
@@ -52,32 +56,38 @@ export const gameSlice = createSlice({
         state.notEnoughBalance = true;
       } else {
         state.balance -= amountToPlay;
-      }            
+      }
+     state.eventLog.push({gameRound: state.gameRound, winningPool: state.winningPool, hand: state.hand, balance: state.balance})            
     },
     addHand: state => {
         state.hand = createHands()
+        state.playerWinsRound = false;
     },
     clearPool: state => {
       state.winningPool = 0;
     },
     forfeitAction: state => {
+      if(state.playerWinsRound) return;
       state.balance += state.winningPool;
       state.gameRound = 0;
       state.hand = [];
       state.gameEnded = true;
+      state.eventLog.push({gameRound: state.gameRound, winningPool: state.winningPool, hand: state.hand, balance: state.balance})
     },
     hideCards: state => {
-      state.hand = [_.shuffle(state.hand[0].map(e => ({...e, visible:false})))] //TODO shuffle
+      if(!state.hand[0]) return;
+      state.hand = [_.shuffle(state.hand[0].map(e => ({...e, visible:false})))] 
     },
     resetGameState: state => initialState,
     revealCard: (state, action: PayloadAction<any>) => {
+      if(state.playerWinsRound) return;
       const {payload} = action;
       let card: any = _.find(state.hand[0], payload)
       card.visible = true;
       if (evaluateCard(card, state.hand[0])) {
         state.winningPool += winninCardScore * state.gameRound
-      }
-     state.hand = [];
+        state.playerWinsRound = true;
+      }      
     },
   },
 });
@@ -92,6 +102,7 @@ export const selectGameCycle = (state: RootState) => state.game.gameCycle;
 export const selectGameEnded = (state: RootState) => state.game.gameEnded;
 export const selectWinningPool = (state: RootState) => state.game.winningPool;
 export const selectNotEnoughBalance = (state: RootState) => state.game.notEnoughBalance;
-
+export const selectEventLog = (state: RootState) => state.game.eventLog;
+export const selectPlayerWinsround = (state: RootState) => state.game.playerWinsRound;
 
 export default gameSlice.reducer;
