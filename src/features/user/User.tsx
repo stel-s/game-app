@@ -29,7 +29,6 @@ export function User() {
     }
     dispatch(addUserName(name))
     localStorage.setItem('userName', name);
-    localStorage.setItem('balance', balance.toString());
     goToGame();
   }
 

@@ -5,7 +5,7 @@ import { RootState } from '../../app/store';
 import { createHands } from './Deck';
 import { ICard } from './components/card/Card';
 
-const defaultBalance = Number(localStorage.getItem('balance')) || 0;
+const defaultBalance = 0;
 const winninCardScore = 5;
 const amountToPlay = 15;
 
