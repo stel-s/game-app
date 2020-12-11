@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import {
   addUserName,
-  selectUserName
+  selectUserName,
+  selectUserBalance,
 } from './userSlice';
 import { resetGameState, resetUserState } from '../../features/';
 
@@ -11,10 +12,12 @@ import styles from './User.module.css';
 
 export function User() {
   const dispatch = useDispatch();
-  const [name, setName] = useState('');
   const [errorInput, setErrorInput] = useState('');
   const history = useHistory();
- 
+  const balance = useSelector(selectUserBalance);
+  const userName = useSelector(selectUserName);
+  
+
   const goToGame = () => {
     history.push("/game");
   }
@@ -26,6 +29,7 @@ export function User() {
     }
     dispatch(addUserName(name))
     localStorage.setItem('userName', name);
+    localStorage.setItem('balance', balance.toString());
     goToGame();
   }
 
@@ -35,14 +39,14 @@ export function User() {
         Select Your UserName to start the game
         <input
           aria-label="choose user name"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={userName}
+          onChange={e => dispatch(addUserName(e.target.value))}
         />
         {errorInput && <div>UserName required</div>}
         <button
           className='waves-effect waves-light btn'
           onClick={() =>
-            saveUserName(name)
+            saveUserName(userName)
           }
         >
           Submit

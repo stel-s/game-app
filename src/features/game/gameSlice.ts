@@ -5,7 +5,7 @@ import { RootState } from '../../app/store';
 import { createHands } from './Deck';
 import { ICard } from './components/card/Card';
 
-const defaultBalance = 100;
+const defaultBalance = Number(localStorage.getItem('balance')) || 0;
 const winninCardScore = 5;
 const amountToPlay = 15;
 
@@ -52,12 +52,6 @@ export const gameSlice = createSlice({
     increment: state => {
         state.gameRound += 1;
         state.cardsHidden = false;
-    },
-    decrement: state => {
-        state.gameRound -= 1;
-    },
-    increaseBalance: state => {
-        state.balance += 1;
     },
     decreaseGameBalance: state => {
       if(state.balance < amountToPlay){
@@ -109,7 +103,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { increment, decrement, addHand, decreaseGameBalance, hideCards, forfeitAction, resetGameState, revealCard } = gameSlice.actions;
+export const { increment, addHand, decreaseGameBalance, hideCards, forfeitAction, resetGameState, revealCard } = gameSlice.actions;
 
 export const selectUserBalance = (state: RootState) => state.game.balance;
 export const selectGameRound = (state: RootState) => state.game.gameRound;
