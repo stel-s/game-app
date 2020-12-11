@@ -6,8 +6,8 @@ import { createHands } from './Deck';
 import { ICard } from './components/card/Card';
 
 const defaultBalance = 0;
-const winninCardScore = 5;
-const amountToPlay = 15;
+const winninCardScore = 5; // the score of winning cards
+const amountToPlay = 15; // amount reduced from balance to play each round
 
 interface GameState {
   balance: number;
