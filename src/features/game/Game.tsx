@@ -79,6 +79,7 @@ export const Game: React.FC = () => {
         <div className={classnames(styles.box, styles.playerItems)}>
           {playerWinsRound && `Player Wins round ${round}`}
           {round > 0 && playerWinsRound ? <span> Press Deal to continue..</span> : ' Player Cards:'}
+          {gameEnded && 'Game Ended! Press Start Game to start a new Game!'}
           <div className={classnames(styles.box, styles.items)}>
             <div className="playingCards simpleCards faceImages">
               {hand[0] && hand[0].map(({ rank, suit, weight, visible }, index) => (
@@ -107,13 +108,14 @@ export const Game: React.FC = () => {
       </div>
 
       <div className={styles.spaceTop}>
-        {round > 0 && <button type="button" className="button waves-effect waves-light btn" onClick={forfeit} >Forfeit?</button>}
+        {round > 0 && <div>
+          <button type="button" className="button waves-effect waves-light btn" onClick={forfeit} >Forfeit?</button>
+          <span>Winning Pool will be added to balance but game will end</span>
+        </div>}
       </div>
+     
       <div>
-        {gameEnded && 'Game Ended! Press Start Game to start a new Game!'}
-      </div>
-      <div>
-         Instructions: Cards Will be Presented then hidden and shuffled, Winning Cards are the highest ranking showed
+        Instructions: Cards Will be Presented then hidden and shuffled, Winning Cards are the highest ranking showed
       </div>
       <div className={styles.eventLog}>
         {eventLog.map((event, index) => {

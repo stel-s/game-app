@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import * as _ from 'lodash';
 
 import { RootState } from '../../app/store';
@@ -35,8 +35,14 @@ const initialState: GameState = {
   cardsHidden: false,
 };
 
-const evaluateCard = (card: ICard, hand): boolean => {
- return true;
+const evaluateCard = (card: ICard, hand: ICard[]): boolean => {
+  const temp = [...hand];
+  const sortedHand = temp.sort((a, b) => a.weight - b.weight)[0]
+  const minWeight = sortedHand.weight;
+  if(card.weight > minWeight) {
+    return true;
+  }
+  return false;
 };
 
 export const gameSlice = createSlice({
@@ -45,6 +51,7 @@ export const gameSlice = createSlice({
   reducers: {
     increment: state => {
         state.gameRound += 1;
+        state.cardsHidden = false;
     },
     decrement: state => {
         state.gameRound -= 1;
@@ -64,6 +71,7 @@ export const gameSlice = createSlice({
     addHand: state => {
         state.hand = createHands()
         state.playerWinsRound = false;
+        state.gameEnded = false;
     },
     clearPool: state => {
       state.winningPool = 0;
@@ -71,6 +79,7 @@ export const gameSlice = createSlice({
     forfeitAction: state => {
       if(state.playerWinsRound) return;
       state.balance += state.winningPool;
+      state.winningPool = initialState.winningPool;
       state.gameRound = 0;
       state.hand = [];
       state.gameEnded = true;
@@ -90,6 +99,11 @@ export const gameSlice = createSlice({
       if (evaluateCard(card, state.hand[0])) {
         state.winningPool += winninCardScore * state.gameRound
         state.playerWinsRound = true;
+      } else {
+        state.playerWinsRound = false;
+        state.winningPool = 0;
+        state.gameEnded = true;
+        state.gameRound = 0;
       }      
     },
   },

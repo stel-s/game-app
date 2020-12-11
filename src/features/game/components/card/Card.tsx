@@ -2,7 +2,6 @@ import React from 'react';
 import './cards.css';
 
 interface ICardsProps {
-  selected?: boolean;
   rank: string;
   suit: string;
   weight: number;
@@ -31,8 +30,6 @@ const CardBody = ({ rank, suit }) => {
   );
 };
 
-
-
 const CardSimple: React.FC<ICardSimpleProps>  = ({ rank, suit, weight, visible, selectCard }) => {
   const card = visible ? `card rank-${rank.toLowerCase()} ${suit}`: `card back`;
   return  (
@@ -43,9 +40,8 @@ const CardSimple: React.FC<ICardSimpleProps>  = ({ rank, suit, weight, visible, 
 };
 
 const Card: React.FC<ICardsProps> = (props) => {
-  const { selected } = props;
   const card = <CardSimple {...props} />;
-  return selected ? <strong>{card}</strong> : card;
+  return card;
 };
 
 export default Card;
